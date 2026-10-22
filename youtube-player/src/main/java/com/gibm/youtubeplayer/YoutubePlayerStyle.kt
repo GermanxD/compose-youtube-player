@@ -16,8 +16,8 @@ public data class YoutubePlayerColors(
 )
 
 /**
- * Textos de accesibilidad de los botones. Vienen en español porque las apps que lo usan son en
- * español; una app en otro idioma pasa los suyos, normalmente con `stringResource`.
+ * Textos de accesibilidad de los botones, en español por defecto. Para otro idioma se pasan los
+ * propios, normalmente con `stringResource`.
  */
 @Immutable
 public data class YoutubePlayerLabels(

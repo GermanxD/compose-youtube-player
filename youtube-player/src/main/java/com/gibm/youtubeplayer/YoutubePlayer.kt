@@ -84,10 +84,9 @@ private val SEEK_BUBBLE_SHAPE = RoundedCornerShape(6.dp)
 private const val SEEK_SETTLE_TOLERANCE_SECONDS = 1.5f
 
 /**
- * El reproductor embebido de un video de YouTube, con la libreria de PierfrancescoSoffritti en
- * vez de un `WebView` a mano: lo que fallaba (el `Dialog` sin aceleracion por hardware, el video
- * sin pintar dentro de un recorte redondeado) era de como se monta un `WebView` suelto, y la
- * libreria ya trae su propio manejo de eso resuelto.
+ * El reproductor embebido de un video de YouTube. Se apoya en android-youtube-player y no en un
+ * `WebView` propio porque esa libreria ya resuelve la aceleracion por hardware dentro de un
+ * `Dialog` y el pintado del video dentro de un recorte redondeado.
  *
  * La barra nativa del IFrame va apagada y en su lugar se pinta una propia en Compose.
  *
