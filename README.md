@@ -9,27 +9,16 @@ barra nativa del IFrame apagada.
 
 Requiere minSdk 23.
 
-Se publica en GitHub Packages, que pide un token aunque solo vayas a leer. Crea un token clásico
-con `read:packages` y ponlo en `~/.gradle/gradle.properties`:
-
-```properties
-gpr.user=tu-usuario-de-github
-gpr.key=ghp_...
-```
-
-En el `settings.gradle.kts` de la app:
+Se publica con [JitPack](https://jitpack.io/#GermanxD/compose-youtube-player) desde los tags del
+repo; no hace falta token. En el `settings.gradle.kts` de la app:
 
 ```kotlin
 dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven("https://maven.pkg.github.com/GermanxD/compose-youtube-player") {
-            credentials {
-                username = providers.gradleProperty("gpr.user").orNull ?: System.getenv("GITHUB_ACTOR")
-                password = providers.gradleProperty("gpr.key").orNull ?: System.getenv("GITHUB_TOKEN")
-            }
-            content { includeGroup("com.gibm") }
+        maven("https://jitpack.io") {
+            content { includeGroupByRegex("com\\.github\\.GermanxD.*") }
         }
     }
 }
@@ -38,7 +27,7 @@ dependencyResolutionManagement {
 Y en el módulo:
 
 ```kotlin
-implementation("com.gibm:youtube-player:1.0.0")
+implementation("com.github.GermanxD.compose-youtube-player:youtube-player:v1.0.1")
 ```
 
 ## Uso
