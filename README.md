@@ -5,9 +5,9 @@ progreso con globito de tiempo y pantalla completa). Por dentro usa
 [android-youtube-player](https://github.com/PierfrancescoSoffritti/android-youtube-player) con la
 barra nativa del IFrame apagada.
 
-Salió de TigreFit (`:core:designsystem`). minSdk 23.
-
 ## Instalar
+
+Requiere minSdk 23.
 
 Se publica en GitHub Packages, que pide un token aunque solo vayas a leer. Crea un token clásico
 con `read:packages` y ponlo en `~/.gradle/gradle.properties`:
@@ -73,19 +73,3 @@ Se puede ajustar con:
 - `timeTextStyle`: tipografía de los tiempos (por defecto `MaterialTheme.typography.labelSmall`).
 - `colors = YoutubePlayerColors(progress = ..., content = ...)`.
 - `labels = YoutubePlayerLabels(...)`: textos de accesibilidad de los botones (en español por defecto).
-
-## Probar un cambio sin publicar
-
-```bash
-./gradlew publishToMavenLocal
-```
-
-y en la app pon `mavenLocal()` antes del repositorio de GitHub Packages.
-
-## Publicar una versión
-
-```bash
-git tag v1.0.1 && git push origin v1.0.1
-```
-
-`.github/workflows/publish.yml` publica con la versión del tag (sin la `v`).
