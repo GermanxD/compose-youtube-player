@@ -18,7 +18,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven("https://jitpack.io") {
-            content { includeGroupByRegex("com\\.github\\.GermanxD.*") }
+            content { includeGroup("com.github.GermanxD") }
         }
     }
 }
@@ -27,7 +27,7 @@ dependencyResolutionManagement {
 Y en el módulo:
 
 ```kotlin
-implementation("com.github.GermanxD.compose-youtube-player:youtube-player:v1.0.1")
+implementation("com.github.GermanxD:compose-youtube-player:v1.0.1")
 ```
 
 ## Uso
