@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -110,13 +111,25 @@ public fun YoutubePlayer(
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     var player by remember { mutableStateOf<YouTubePlayer?>(null) }
-    var isPlaying by remember { mutableStateOf(false) }
-    var currentSecond by remember { mutableFloatStateOf(0f) }
-    var duration by remember { mutableFloatStateOf(0f) }
+    var lastLoadedVideoId by rememberSaveable { mutableStateOf(videoId) }
+    var isPlaying by rememberSaveable { mutableStateOf(false) }
+    var currentSecond by rememberSaveable { mutableFloatStateOf(0f) }
+    var videoDuration by rememberSaveable { mutableFloatStateOf(0f) }
     var seekPosition by remember { mutableStateOf<Float?>(null) }
 
     LaunchedEffect(player, videoId) {
-        player?.loadVideo(videoId, 0f)
+        val activePlayer = player ?: return@LaunchedEffect
+        if (videoId != lastLoadedVideoId) {
+            lastLoadedVideoId = videoId
+            currentSecond = 0f
+            videoDuration = 0f
+            seekPosition = null
+            activePlayer.loadVideo(videoId, 0f)
+        } else if (currentSecond > 0f && !isPlaying) {
+            activePlayer.cueVideo(videoId, currentSecond)
+        } else {
+            activePlayer.loadVideo(videoId, currentSecond)
+        }
     }
 
     Box(modifier = modifier) {
@@ -157,8 +170,8 @@ public fun YoutubePlayer(
                                 }
                             }
 
-                            override fun onVideoDuration(youTubePlayer: YouTubePlayer, videoDuration: Float) {
-                                duration = videoDuration
+                            override fun onVideoDuration(youTubePlayer: YouTubePlayer, duration: Float) {
+                                videoDuration = duration
                             }
                         },
                         options,
@@ -174,7 +187,7 @@ public fun YoutubePlayer(
         YoutubeControls(
             isPlaying = isPlaying,
             currentSecond = seekPosition ?: currentSecond,
-            duration = duration,
+            duration = videoDuration,
             isFullscreen = isFullscreen,
             onPlayPauseClick = { if (isPlaying) player?.pause() else player?.play() },
             onSeekChange = { seekPosition = it },
