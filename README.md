@@ -36,7 +36,7 @@ La pantalla completa la maneja quien llama al reproductor. Para que el video no 
 cambiar de tamaño, envuélvelo en `movableContentOf` y píntalo donde toque:
 
 ```kotlin
-var isFullscreen by remember { mutableStateOf(false) }
+var isFullscreen by rememberSaveable { mutableStateOf(false) }
 BackHandler(enabled = isFullscreen) { isFullscreen = false }
 
 val player = remember {
@@ -51,7 +51,14 @@ val player = remember {
 }
 
 if (isFullscreen) {
-    player(Modifier.fillMaxSize().background(Color.Black).safeDrawingPadding())
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+            .safeDrawingPadding(),
+    ) {
+        player(Modifier.fillMaxSize())
+    }
 } else {
     player(Modifier.fillMaxWidth().aspectRatio(16f / 9f))
 }
