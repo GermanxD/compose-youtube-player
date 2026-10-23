@@ -51,7 +51,7 @@ val player = remember {
 }
 
 if (isFullscreen) {
-    player(Modifier.fillMaxSize().background(Color.Black).safeAreaPadding())
+    player(Modifier.fillMaxSize().background(Color.Black).safeDrawingPadding())
 } else {
     player(Modifier.fillMaxWidth().aspectRatio(16f / 9f))
 }
@@ -62,3 +62,15 @@ Se puede ajustar con:
 - `timeTextStyle`: tipografía de los tiempos (por defecto `MaterialTheme.typography.labelSmall`).
 - `colors = YoutubePlayerColors(progress = ..., content = ...)`.
 - `labels = YoutubePlayerLabels(...)`: textos de accesibilidad de los botones (en español por defecto).
+
+## Ejemplo
+
+El módulo [`:sample`](sample/src/main/java/com/gibm/youtubeplayer/sample/MainActivity.kt) trae una
+app completa con cambio de video, pantalla completa con `movableContentOf` y personalización de
+colores. Para correrla en un dispositivo o emulador conectado:
+
+```bash
+./gradlew :sample:installDebug
+```
+
+O abre el repositorio en Android Studio y ejecuta la configuración **sample**.
