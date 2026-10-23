@@ -23,4 +23,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "compose-youtube-player"
-include(":youtube-player")
+include(":youtube-player", ":sample")
