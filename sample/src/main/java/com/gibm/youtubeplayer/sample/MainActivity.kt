@@ -8,16 +8,21 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
@@ -29,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -76,9 +82,9 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun YoutubePlayerSampleScreen() {
-    var selectedVideo by remember { mutableStateOf(SAMPLE_VIDEOS.first()) }
-    var isFullscreen by remember { mutableStateOf(false) }
-    var useCustomColor by remember { mutableStateOf(false) }
+    var selectedVideoId by rememberSaveable { mutableStateOf(SAMPLE_VIDEOS.first().id) }
+    var isFullscreen by rememberSaveable { mutableStateOf(false) }
+    var useCustomColor by rememberSaveable { mutableStateOf(false) }
 
     BackHandler(enabled = isFullscreen) {
         isFullscreen = false
@@ -93,7 +99,7 @@ private fun YoutubePlayerSampleScreen() {
     val player = remember {
         movableContentOf<Modifier> { modifier ->
             YoutubePlayer(
-                videoId = selectedVideo.id,
+                videoId = selectedVideoId,
                 isFullscreen = isFullscreen,
                 onFullscreenChange = { isFullscreen = it },
                 colors = playerColors,
@@ -103,18 +109,24 @@ private fun YoutubePlayerSampleScreen() {
     }
 
     if (isFullscreen) {
-        player(
-            Modifier
+        Box(
+            modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Black)
                 .safeDrawingPadding(),
-        )
+        ) {
+            player(Modifier.fillMaxSize())
+        }
     } else {
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            contentWindowInsets = WindowInsets.safeDrawing,
+        ) { innerPadding ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
+                    .verticalScroll(rememberScrollState())
                     .padding(16.dp),
             ) {
                 Text(
@@ -161,8 +173,8 @@ private fun YoutubePlayerSampleScreen() {
                     SAMPLE_VIDEOS.forEach { video ->
                         VideoOptionRow(
                             video = video,
-                            selected = video == selectedVideo,
-                            onClick = { selectedVideo = video },
+                            selected = video.id == selectedVideoId,
+                            onClick = { selectedVideoId = video.id },
                         )
                     }
                 }
